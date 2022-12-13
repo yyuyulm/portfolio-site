@@ -1,0 +1,60 @@
+{
+    "info":[
+        {"title": "Machinary Gaze", 
+        "tags": ["Lens", 
+                "Code", 
+                "TouchDesigner"]},
+        
+        {"title": "PoeTree", 
+        "tags": ["Words", 
+                "Code", 
+                "Data", 
+                "Machine Learning"]},
+        
+        {"title": "Untouchable",
+        "tags": ["Movement", 
+                "Motion Capture", 
+                "Unreal Engine"]},
+        
+        {"title": "Covid Hotspot",
+        "tags": ["Data", 
+                "Code"]},
+        
+        {"title": "Cyborg's Visa",
+        "tags": ["Movement", 
+                "Unreal Engine",
+                "Light",
+                "Motion Capture"]},
+        
+        {"title": "Mountain Stream",
+        "tags": ["Movement", 
+                "Sound",
+                "Light",
+                "Sensor",
+                "Code",
+                "TouchDesigner"]},
+        
+        {"title": "Generative Selfies",
+        "tags": ["Code",
+                "TouchDesigner"]},
+        
+        {"title": "This is a dance...",
+        "tags": ["Code",
+                "TouchDesigner",
+                "Sensor",
+                "Movement",
+                "Machine Learning",
+                "Words"]},
+        
+        {"title": "A Mary",
+        "tags": ["Lens",
+                "Sound"]},
+
+        {"title": "Interactive Witnessing",
+        "tags": ["Code",
+                "Light",
+                "TouchDesigner",
+                "Sensor"
+                ]}
+    ]
+}
