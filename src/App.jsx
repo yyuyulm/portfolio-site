@@ -18,14 +18,14 @@ projects.info.forEach(project => {
     project.tags.forEach(tag => {
       let i = tagArray.findIndex(element => element.tag == tag);
       if(i == -1){
-        // nodes.push({"id" : tag, "type": "tag"});
-        // links.push({"source": tag, "target": "Sylvia Ke", "type": "t2r"});
+        //nodes.push({"id" : tag, "type": "tag"});
+        //links.push({"source": tag, "target": "Sylvia Ke", "type": "t2r"});
         tagArray.push({"tag" : tag, "children" : [project.title]});
       }
       else{
         tagArray[i].children.push(project.title);
       }
-      // links.push({"source": project.title, "target": tag, "type": "p2t"})
+      //links.push({"source": project.title, "target": tag, "type": "p2t"})
     });
 }); 
 

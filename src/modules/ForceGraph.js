@@ -7,7 +7,7 @@ function ForceGraph(svg, {
     nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
     nodeGroup, // given d in nodes, returns an (ordinal) value for color
     nodeGroups, // an array of ordinal values representing the node groups
-    nodeFill = "#fff", // node stroke fill (if not using a group color encoding)
+    nodeFill = "none", // node stroke fill (if not using a group color encoding)
     nodeStroke = "#fff", // node stroke color
     nodeStrokeWidth = 1, // node stroke width, in pixels
     nodeStrokeOpacity = 1, // node stroke opacity
@@ -49,7 +49,8 @@ function ForceGraph(svg, {
     nodes = d3.map(nodes, (_, i) => ({id: N[i],
       type: G[i],
       size: sizeScale(G[i]),
-      text: textScale(G[i])}));
+      text: textScale(G[i])}),
+      );
     links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
 
     // Compute default domains.
@@ -79,24 +80,71 @@ function ForceGraph(svg, {
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic; overflow: hidden");
 
+    const defs = svg.append("defs");
+
+    const rectFilter = defs.append("mask")
+        .attr("id","linkMask")
+        .attr('x', -width/2)
+        .attr('y', -height/2)
+        .attr('height', height)
+        .attr('width', width)
+
+    rectFilter.append('rect')
+      .attr("fill", '#fff')
+      .attr("stroke", 'none')
+      .attr('x', -width/2)
+      .attr('y', -height/2)
+      .attr('height', height)
+      .attr('width', width)
+
+    const nodeBg = rectFilter.append("g")
+      .attr("fill", '#000')
+      .attr("stroke", 'none')
+      .attr("data-zoom", true)
+    .selectAll("rect")
+    .data(nodes)
+    .join("rect")
+      .attr('nodeId', nodeId)
+      .attr("width", nodeWidth)
+      .attr("height", nodeHeight)
+      .attr("rx", nodeRadius)
+      .call(drag(simulation));
+
     const backgroundText = svg.append("text")
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
       .attr("font-size", 30)  
-      .text("Hello, stranger.");
+      .text("Hello, stranger.")
+      .attr("mask", "url(#linkMask)");
 
+    const images = svg.append('g')
+
+    function updateBackground(project){
+      let i = images.selectAll('image')
+        .data(nodes.filter(function(d){return d.id==project && d.type != 'tag'}))
+        .join('image')
+          .attr('href', d => ('/src/assets/' + d.id +'.jpeg'))
+          .attr('nodeId', nodeId)
+          .attr('x', -width/2)
+          .attr('y', -height/2)
+          .attr('height', height)
+          .attr('width', width)
+      //console.log(nodes.filter(function(d){return d.id==project}))
+    }
+    
     const link = svg.append("g")
         .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
         .attr("stroke-opacity", linkStrokeOpacity)
         .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
         .attr("stroke-linecap", linkStrokeLinecap)
         .attr("data-zoom", true)
+        .attr("mask", "url(#linkMask)")
       .selectAll("line")
       .data(links)
       .join("line");
 
     const node = svg.append("g")
-        .attr("fill", nodeFill)
+        .attr("fill", 'transparent')
         .attr("stroke", nodeStroke)
         .attr("stroke-opacity", nodeStrokeOpacity)
         .attr("stroke-width", nodeStrokeWidth)
@@ -104,10 +152,18 @@ function ForceGraph(svg, {
       .selectAll("rect")
       .data(nodes)
       .join("rect")
+        .attr('nodeId', nodeId)
         .attr("width", nodeWidth)
         .attr("height", nodeHeight)
         .attr("rx", nodeRadius)
-        .call(drag(simulation));
+        //.call(drag(simulation))
+        .on('mouseover', function(d){
+          let search = d3.select(this).attr('nodeId')
+          updateBackground(search)
+        })
+        .on('mouseout', function(d){
+          updateBackground(null)
+        });
 
     const text = svg.append("g")
         .attr("data-zoom", true)
@@ -118,8 +174,15 @@ function ForceGraph(svg, {
         .attr("dominant-baseline", "central")
         .attr("font-size", nodeTextSize)
         .attr("font-family", nodeFont)
-        .call(drag(simulation))
-        .text(nodeId);
+        //.call(drag(simulation))
+        .text(nodeId)
+        .on('mouseover', function(d){
+          let search = d3.select(this).text()
+          updateBackground(search)
+        })
+        .on('mouseout', function(d){
+          updateBackground(null)
+        });
 
   
     if (W) link.attr("stroke-width", ({index: i}) => W[i]);
@@ -138,6 +201,10 @@ function ForceGraph(svg, {
         .attr("y2", d => d.target.y);
   
       node
+        .attr("x", d => d.x - d.size.width/2)
+        .attr("y", d => d.y - d.size.height/2);
+      
+      nodeBg
         .attr("x", d => d.x - d.size.width/2)
         .attr("y", d => d.y - d.size.height/2);
 
@@ -178,6 +245,7 @@ function ForceGraph(svg, {
       .on("zoom", zoomed));
     
     function zoomed({transform}) {
+      nodeBg.attr("transform", transform);
       node.attr("transform", transform);
       text.attr("transform", transform);
       link.attr("transform", transform);

@@ -34,9 +34,11 @@
                 "Code",
                 "TouchDesigner"]},
         
-        {"title": "Generative Selfies",
+        {"title": "In (Y)our Words",
         "tags": ["Code",
-                "TouchDesigner"]},
+                "Words",
+                "Data",
+                "Collective"]},
         
         {"title": "This is a dance...",
         "tags": ["Code",
@@ -54,7 +56,8 @@
         "tags": ["Code",
                 "Light",
                 "TouchDesigner",
-                "Sensor"
+                "Sensor",
+                "Collective"
                 ]}
     ]
 }

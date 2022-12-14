@@ -1,5 +1,4 @@
 import { useD3 } from './useD3';
-//import * as d3 from "d3";
 import ForceGraph from './ForceGraph';
 
 
@@ -16,9 +15,9 @@ const NodeSVG = ({data,dimensions}) => {
                 nodeGroup: d => d.type,
                 nodeFill: "#fff",
                 nodeStroke: "#000",
-                nodeStrokeWidth: 0.4,
+                nodeStrokeWidth: 1.5,
                 linkStroke: "#000",
-                linkStrokeWidth: 0.4,
+                linkStrokeWidth: 0.6,
                 linkStrokeOpacity: 1,
                 
                 width : svgWidth,
