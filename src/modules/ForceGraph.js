@@ -123,7 +123,7 @@ function ForceGraph(svg, {
       let i = images.selectAll('image')
         .data(nodes.filter(function(d){return d.id==project && d.type != 'tag'}))
         .join('image')
-          .attr('href', d => ('/src/assets/' + d.id +'.jpeg'))
+          .attr('href', d => ('/assets/' + d.id +'.jpeg'))
           .attr('nodeId', nodeId)
           .attr('x', -width/2)
           .attr('y', -height/2)
